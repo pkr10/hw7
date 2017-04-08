@@ -30,54 +30,30 @@ public class MainActivity extends AppCompatActivity {
     ArrayList<Data> data1 = new ArrayList<Data>();
     ArrayAdapter<Data> adapter;
     TextView t1;
-    /**
-     * ATTENTION: This was auto-generated to implement the App Indexing API.
-     * See https://g.co/AppIndexing/AndroidStudio for more information.
-     */
-    private GoogleApiClient client;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
         setListview();
         init();
-
-
-
-        // ATTENTION: This was auto-generated to implement the App Indexing API.
-        // See https://g.co/AppIndexing/AndroidStudio for more information.
-        client = new GoogleApiClient.Builder(this).addApi(AppIndex.API).build();
     }
-
     public void setListview() {
         l1 = (ListView) findViewById(R.id.listview);
         adapter = new ArrayAdapter<Data>(this, android.R.layout.simple_list_item_1, data1);
-
         l1.setAdapter(adapter);
-
-
     }
-
-
     public void onClick(View view) {
-
         Intent intent = new Intent(this, Main2Activity.class);
         startActivityForResult(intent, 100);
     }
-
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == 100) {
             if (resultCode == RESULT_OK) {
                 final Data user = data.getParcelableExtra("user");
-
                 Log.d("Park3", user.category);
-
                 data1.add(user);
-
                 adapter.notifyDataSetChanged();
                 l1.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                     @Override
@@ -85,9 +61,6 @@ public class MainActivity extends AppCompatActivity {
                         Intent intent1 = new Intent(MainActivity.this, Main3Activity.class);
                         intent1.putExtra("user1", data1.get(position));
                         startActivity(intent1);
-
-
-
                     }
                 });
                 l1.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
@@ -104,30 +77,17 @@ public class MainActivity extends AppCompatActivity {
                                 adapter.notifyDataSetChanged();
                                 Snackbar.make(view,"삭제되었습니다",Snackbar.LENGTH_SHORT).show();
                                 t1.setText("맛집 리스트("+data1.size()+"개)");
-
                             }
                         });
                         dlg.show();
-
-
-
                         return false;
                     }
                 });
                 t1.setText("맛집 리스트("+data1.size()+"개)");
-
-
-
-
             }
         }
-
-
     }
     void init(){
         t1 = (TextView)findViewById(R.id.tv);
     }
-
-
-
 }
