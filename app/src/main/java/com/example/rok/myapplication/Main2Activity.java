@@ -8,6 +8,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.RadioButton;
+import android.widget.Toast;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -43,23 +44,25 @@ public class Main2Activity extends AppCompatActivity {
                 String menu1 = e4.getText().toString();
                 String menu2 = e5.getText().toString();
                 String menu3 = e6.getText().toString();
-
-                if(r1.isChecked()){
-                    category = "chicken";
+                if(e1.getText().toString().matches("")){
+                    Toast.makeText(getApplicationContext(),"적어도 이름만은 채워주세요",Toast.LENGTH_SHORT).show();
                 }
-                else if(r2.isChecked()){
-                    category = "pizza";
+                else {
+                    if (r1.isChecked()) {
+                        category = "chicken";
+                    } else if (r2.isChecked()) {
+                        category = "pizza";
+                    } else {
+                        category = "hamburger";
+                    }
+                    Log.d("Park1", category);
+                    Data data = new Data(name, tel, address, formatDate, category, menu1, menu2, menu3, count);
+                    Log.d("Park2", data.category);
+                    Intent intent = getIntent();
+                    intent.putExtra("user", data);
+                    setResult(RESULT_OK, intent);
+                    finish();
                 }
-                else{
-                    category = "hamburger";
-                }
-                Log.d("Park1",category);
-                Data data = new Data(name,tel,address,formatDate,category,menu1,menu2,menu3,count);
-                Log.d("Park2",data.category);
-                Intent intent = getIntent();
-                intent.putExtra("user", data);
-                setResult(RESULT_OK,intent);
-                finish();
                 break;
             case R.id.btnCancel:
                 onBackPressed();

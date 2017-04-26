@@ -26,7 +26,7 @@ public class MainActivity extends AppCompatActivity {
     EditText e1;
     ArrayList<Data> data2 = new ArrayList<Data>();
     CheckBox c1;
-    View target;
+    View v;
 
 
     @Override
@@ -85,25 +85,22 @@ public class MainActivity extends AppCompatActivity {
             case R.id.b4:
                 if(button4.getText().toString().equals("선택")){
                     for(int i=0; i< data1.size(); i++){
-
                             data1.get(i).setCount(1);
-
-
                     }
                     adapter.notifyDataSetChanged();
                     button4.setText("삭제");
                 }
                 else{
                     AlertDialog.Builder dig = new AlertDialog.Builder(MainActivity.this);
-                    dig.setTitle("주문 선택")
+                    dig.setTitle("정말 삭제하실거에요?")
                             .setNegativeButton("취소", null)
                             .setPositiveButton("삭제", new DialogInterface.OnClickListener() {
 
                                 @Override
                                 public void onClick(DialogInterface dialog, int which) {
                                     for(int i=0; i< data1.size(); i++){
-                                        target = data1.get(i).getV();
-                                        c1 = (CheckBox)target.findViewById(R.id.checkBox1);
+                                        v = data1.get(i).getV();
+                                        c1 = (CheckBox)v.findViewById(R.id.checkBox1);
                                         data1.get(i).setCount(0);
                                         if(c1.isChecked()){
                                             data1.remove(i);
