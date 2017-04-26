@@ -22,7 +22,7 @@ public class MainActivity extends AppCompatActivity {
     ListView l1;
     ArrayList<Data> data1 = new ArrayList<Data>();
     DataAdapter adapter;
-    Button button4;
+    Button button4,button1;
     EditText e1;
     ArrayList<Data> data2 = new ArrayList<Data>();
     CheckBox c1;
@@ -40,6 +40,7 @@ public class MainActivity extends AppCompatActivity {
         Log.d("어댑터",adapter.toString());
         Log.d("리스트",l1.toString());
         button4 = (Button)findViewById(R.id.b4);
+        button1 = (Button)findViewById(R.id.b1);
 
 
         e1 = (EditText)findViewById(R.id.editText);
@@ -89,11 +90,24 @@ public class MainActivity extends AppCompatActivity {
                     }
                     adapter.notifyDataSetChanged();
                     button4.setText("삭제");
+                    button1.setEnabled(false);
                 }
                 else{
                     AlertDialog.Builder dig = new AlertDialog.Builder(MainActivity.this);
                     dig.setTitle("정말 삭제하실거에요?")
-                            .setNegativeButton("취소", null)
+                            .setNegativeButton("취소", new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+
+                                    for(int i = 0;i<data1.size();i++){
+                                        data1.get(i).setCount(0);
+                                    }
+                                    button4.setText("선택");
+                                    button1.setEnabled(true);
+                                    adapter.notifyDataSetChanged();
+                                }
+
+                            })
                             .setPositiveButton("삭제", new DialogInterface.OnClickListener() {
 
                                 @Override
@@ -102,6 +116,7 @@ public class MainActivity extends AppCompatActivity {
                                         v = data1.get(i).getV();
                                         c1 = (CheckBox)v.findViewById(R.id.checkBox1);
                                         data1.get(i).setCount(0);
+
                                         if(c1.isChecked()){
                                             data1.remove(i);
                                             i--;
@@ -109,6 +124,7 @@ public class MainActivity extends AppCompatActivity {
                                     }
                                     adapter.notifyDataSetChanged();
                                     button4.setText("선택");
+                                    button1.setEnabled(true);
                                 }
                             })
                             .show();
