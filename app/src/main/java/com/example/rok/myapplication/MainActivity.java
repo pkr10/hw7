@@ -2,49 +2,127 @@ package com.example.rok.myapplication;
 
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.net.Uri;
-import android.os.Parcelable;
-import android.provider.ContactsContract;
-import android.support.design.widget.Snackbar;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
+import android.widget.Button;
+import android.widget.CheckBox;
+import android.widget.EditText;
 import android.widget.ListView;
-import android.widget.TextView;
-
-import com.google.android.gms.appindexing.Action;
-import com.google.android.gms.appindexing.AppIndex;
-import com.google.android.gms.appindexing.Thing;
-import com.google.android.gms.common.api.GoogleApiClient;
-
-import java.lang.reflect.Array;
 import java.util.ArrayList;
-import java.util.List;
+import java.util.Collections;
+import java.util.Comparator;
 
 public class MainActivity extends AppCompatActivity {
     ListView l1;
     ArrayList<Data> data1 = new ArrayList<Data>();
-    ArrayAdapter<Data> adapter;
-    TextView t1;
+    DataAdapter adapter;
+    Button button4;
+    EditText e1;
+    ArrayList<Data> data2 = new ArrayList<Data>();
+    CheckBox c1;
+    View target;
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        setListview();
-        init();
-    }
-    public void setListview() {
+
         l1 = (ListView) findViewById(R.id.listview);
-        adapter = new ArrayAdapter<Data>(this, android.R.layout.simple_list_item_1, data1);
+        adapter = new DataAdapter(data1,this,data2);
         l1.setAdapter(adapter);
+        Log.d("어댑터",adapter.toString());
+        Log.d("리스트",l1.toString());
+        button4 = (Button)findViewById(R.id.b4);
+
+
+        e1 = (EditText)findViewById(R.id.editText);
+
+        e1.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                String text =e1.getText().toString();
+
+                adapter.filter(text);
+
+            }
+        });
+
+
+
     }
+
     public void onClick(View view) {
-        Intent intent = new Intent(this, Main2Activity.class);
-        startActivityForResult(intent, 100);
+        switch (view.getId()){
+            case R.id.b1:
+                Intent intent = new Intent(this, Main2Activity.class);
+                startActivityForResult(intent, 100);
+                break;
+            case R.id.b2:
+                Collections.sort(data1, nameasc);
+                adapter.notifyDataSetChanged();
+                break;
+            case R.id.b3:
+                Collections.sort(data1,categoryasc);
+                adapter.notifyDataSetChanged();
+                break;
+            case R.id.b4:
+                if(button4.getText().toString().equals("선택")){
+                    for(int i=0; i< data1.size(); i++){
+
+                            data1.get(i).setCount(1);
+
+
+                    }
+                    adapter.notifyDataSetChanged();
+                    button4.setText("삭제");
+                }
+                else{
+                    AlertDialog.Builder dig = new AlertDialog.Builder(MainActivity.this);
+                    dig.setTitle("주문 선택")
+                            .setNegativeButton("취소", null)
+                            .setPositiveButton("삭제", new DialogInterface.OnClickListener() {
+
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+                                    for(int i=0; i< data1.size(); i++){
+                                        target = data1.get(i).getV();
+                                        c1 = (CheckBox)target.findViewById(R.id.checkBox1);
+                                        data1.get(i).setCount(0);
+                                        if(c1.isChecked()){
+                                            data1.remove(i);
+                                            i--;
+                                        }
+                                    }
+                                    adapter.notifyDataSetChanged();
+                                    button4.setText("선택");
+                                }
+                            })
+                            .show();
+                }
+
+                break;
+
+
+
+        }
+
     }
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -54,6 +132,7 @@ public class MainActivity extends AppCompatActivity {
                 final Data user = data.getParcelableExtra("user");
                 Log.d("Park3", user.category);
                 data1.add(user);
+                data2.add(user);
                 adapter.notifyDataSetChanged();
                 l1.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                     @Override
@@ -63,31 +142,21 @@ public class MainActivity extends AppCompatActivity {
                         startActivity(intent1);
                     }
                 });
-                l1.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
-                    @Override
-                    public boolean onItemLongClick(AdapterView<?> parent, final View view, final int position, long id) {
-                        AlertDialog.Builder dlg = new AlertDialog.Builder(MainActivity.this);
-                        dlg.setTitle("삭제확인");
-                        dlg.setMessage("정말 삭제하시겠어요?");
-                        dlg.setNegativeButton("닫기",null);
-                        dlg.setPositiveButton("확인", new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                                data1.remove(position);
-                                adapter.notifyDataSetChanged();
-                                Snackbar.make(view,"삭제되었습니다",Snackbar.LENGTH_SHORT).show();
-                                t1.setText("맛집 리스트("+data1.size()+"개)");
-                            }
-                        });
-                        dlg.show();
-                        return false;
-                    }
-                });
-                t1.setText("맛집 리스트("+data1.size()+"개)");
+
             }
         }
     }
-    void init(){
-        t1 = (TextView)findViewById(R.id.tv);
-    }
+  Comparator<Data> nameasc = new Comparator<Data>() {
+      @Override
+      public int compare(Data o1, Data o2) {
+          return o1.name.compareTo(o2.name);
+      }
+  };
+    Comparator<Data> categoryasc = new Comparator<Data>() {
+        @Override
+        public int compare(Data o1, Data o2) {
+            return o1.category.compareTo(o2.category);
+        }
+    };
+
 }

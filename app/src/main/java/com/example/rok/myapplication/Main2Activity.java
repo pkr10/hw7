@@ -17,6 +17,7 @@ public class Main2Activity extends AppCompatActivity {
     EditText e1,e2,e3,e4,e5,e6;
     RadioButton r1,r2,r3;
     Button b1;
+    int count =0;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -53,7 +54,7 @@ public class Main2Activity extends AppCompatActivity {
                     category = "hamburger";
                 }
                 Log.d("Park1",category);
-                Data data = new Data(name,tel,address,formatDate,category,menu1,menu2,menu3);
+                Data data = new Data(name,tel,address,formatDate,category,menu1,menu2,menu3,count);
                 Log.d("Park2",data.category);
                 Intent intent = getIntent();
                 intent.putExtra("user", data);

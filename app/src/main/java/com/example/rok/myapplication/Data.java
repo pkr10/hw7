@@ -3,6 +3,7 @@ package com.example.rok.myapplication;
 import android.os.Parcel;
 import android.os.Parcelable;
 import android.util.StringBuilderPrinter;
+import android.view.View;
 
 /**
  * Created by rok on 2017. 4. 6..
@@ -17,13 +18,15 @@ public class Data implements Parcelable{
     String menu1;
     String menu2;
     String menu3;
+    int count;
+    View v;
 
 
 
 
 
 
-    public Data(String name, String number, String adrress, String date, String category, String menu1, String menu2, String menu3){
+    public Data(String name, String number, String adrress, String date, String category, String menu1, String menu2, String menu3,int count){
         this.name = name;
         this.number = number;
         this.adrress = adrress;
@@ -32,6 +35,7 @@ public class Data implements Parcelable{
         this.menu1 = menu1;
         this.menu2 = menu2;
         this.menu3 = menu3;
+        this.count = count;
     }
 
     private Data(Parcel in) {
@@ -43,6 +47,7 @@ public class Data implements Parcelable{
         menu1 = in.readString();
         menu2 = in.readString();
         menu3 = in.readString();
+        count = in.readInt();
     }
 
     @Override
@@ -77,8 +82,19 @@ public class Data implements Parcelable{
         dest.writeString(menu1);
         dest.writeString(menu2);
         dest.writeString(menu3);
+        dest.writeInt(count);
 
 
 
+    }
+    public View getV() {
+        return v;
+    }
+
+    public void setV(View v) {
+        this.v = v;
+    }
+    public void setCount(int n){
+        this.count = n;
     }
 }
