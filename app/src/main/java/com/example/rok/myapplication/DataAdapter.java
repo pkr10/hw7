@@ -18,11 +18,11 @@ import java.util.List;
  */
 
 public class DataAdapter extends BaseAdapter{
-    List<Data> datalist;
+    ArrayList<Data> datalist;
     Context c;
     ArrayList<Data> arrayList;
 
-    public DataAdapter(List<Data> datalist,Context c,ArrayList<Data> arrayList){
+    public DataAdapter(ArrayList<Data> datalist,Context c,ArrayList<Data> arrayList){
         this.datalist = datalist;
         this.c = c;
         this.arrayList = arrayList;
@@ -80,6 +80,7 @@ public class DataAdapter extends BaseAdapter{
             c1.setVisibility(View.VISIBLE);
         }
         else {
+            c1.setChecked(false);
             c1.setVisibility(View.INVISIBLE);
         }
         t1.setText(one.name);

@@ -120,8 +120,10 @@ public class MainActivity extends AppCompatActivity {
                                         if(c1.isChecked()){
                                             data1.remove(i);
                                             i--;
+
                                         }
                                     }
+
                                     adapter.notifyDataSetChanged();
                                     button4.setText("선택");
                                     button1.setEnabled(true);
