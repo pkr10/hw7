@@ -6,6 +6,7 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:padding="7dp"
+    android:background="@drawable/rest"
     android:gravity="center">
     <TableLayout
         android:background="#ddfef8f8"
